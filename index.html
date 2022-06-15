@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/drawflow@0.0.45/dist/drawflow.min.css"
+    />
+    <script src="https://unpkg.com/drawflow@0.0.45/dist/drawflow.min.js"></script>
+    <script src="./dealWith.js"></script>
+    <script src="./config.js"></script>
+    <link rel="stylesheet" href="./drawFlow.css" />
+  </head>
+  <body>
+    <div id="drawflow" style="width: 80vw; height: 80vh"></div>
+  </body>
+  <script>
+    var id = document.getElementById("drawflow");
+    var editor = new Drawflow(id);
+    editor.reroute = true;
+    let data = formatData(backData);
+    console.log(data);
+    // data = dsafdsa;
+    // console.log(data);
+    const dataToImport = {
+      drawflow: {
+        Home: { data },
+      },
+    };
+    editor.start();
+    editor.import(dataToImport);
+    // 渲染完毕后调用扫描并修改状态
+    ScanningModify(backData);
+    // editor.import(formatData(backData));
+  </script>
+</html>

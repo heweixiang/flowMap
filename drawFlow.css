@@ -1,0 +1,37 @@
+ /* 修改node节点样式 */
+.drawflow .drawflow-node{
+  min-height: 15px;
+  height: 15px;
+  border: 2px solid #b1ddfd;
+  background-color: #e7f7fe;
+  color: #595b5c;
+  margin-top: 20px;
+  width: 200px;
+}
+
+/* 修改node节点选中样式 */
+.drawflow .drawflow-node.selected{
+  border: 2px solid #50a5f0;
+  background-color: #93d4fd;
+  color: #595b5c;
+}
+
+/* 修改连接点 */
+.drawflow .drawflow-node .input, .drawflow .drawflow-node .output{
+  width: 3px;
+  height: 3px;
+  border: 2px solid #535353;
+}
+/* 修改连接点定位 */
+.drawflow .drawflow-node .input{
+  left: -21px;
+}
+.drawflow .drawflow-node .output{
+  right: -13px;
+}
+
+/* 修改连接线宽度 */
+.drawflow .connection .main-path{
+  stroke-width: 1.5px;
+  /* stroke: #c1c1c1 !important; */
+}
