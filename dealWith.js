@@ -69,13 +69,13 @@ function dealWithPosition(nodeItem, backArray) {
   const y = (maxNodeIdCount - currentNodeIdCount) === 0 ? 0 : (maxNodeIdCount - currentNodeIdCount) / 2;
   // 查找当前node中该nodeId排第几
   const sortNode = backArray.filter(x => x.nodeId === nodeItem.nodeId).findIndex(x => x.onlyNodeId === nodeItem.onlyNodeId);
-  
+
   position.pos_y = y * 75 + 75 * sortNode;
   /*************************************** 计算x轴 ********************************/
   const BuildTree = buildTree(backArray).find(T => T.onlyNodeId === backArray.find(x => backArray.filter(y => !y.nextOnlyNodeId.includes(x.onlyNodeId))).onlyNodeId)
-  
+
   const Deep = getDeep(BuildTree, nodeItem.onlyNodeId)
-  
+
   position.pos_x = Deep * 450;
   return position;
 }
@@ -111,10 +111,10 @@ function ScanningModify(backArray = []) {
         // 灰色虚线
         DottedLine(["node_in_node-" + id, "node_out_node-" + item.onlyNodeId])
       })
-    } else if([-1, '-1'].includes(item.taskState)){
+    } else if ([-1, '-1'].includes(item.taskState)) {
       item.nextOnlyNodeId.forEach(id => {
         // 退回状态 taskItem存储的为退回单位
-        if(id.includes(item.taskItem.returnUnitId)){
+        if (id.includes(item.taskItem.returnUnitId)) {
           changeColor(["node_in_node-" + id, "node_out_node-" + item.onlyNodeId], "#f00")
           addArrow(["node_in_node-" + id, "node_out_node-" + item.onlyNodeId], 'Reverse')
         }
@@ -123,6 +123,12 @@ function ScanningModify(backArray = []) {
       item.nextOnlyNodeId.forEach(id => {
         addArrow(["node_in_node-" + id, "node_out_node-" + item.onlyNodeId], 'PositiveDirection')
       })
+    }
+    // 给待办状态加个样式
+    if (['1', 1].includes(item.taskState)) {
+      // 给指定id添加class
+      document.getElementById("node-" + item.onlyNodeId).classList.add('current')
+      console.log('"node-" + item.onlyNodeId: ', "node-" + item.onlyNodeId);
     }
   })
 }
@@ -133,7 +139,7 @@ function changeColor(classArray, color) {
 }
 
 // 修改SVG PATH为虚线
-function  DottedLine(classArray){
+function DottedLine(classArray) {
   document.querySelector(`.connection.${classArray.join(".")}`).querySelector(".main-path").style['stroke-dasharray'] = "20 10"
 }
 
@@ -145,11 +151,11 @@ function addArrow(classArray, direction) {
 
   // newPath.setAttribute('d',' M 613.4857511520386 193.98294353485107 C 791.4900236129761 193.98294353485107 781.4900236129761 156.48294353485107 899.4942960739136  156.48294353485107')
   // 获取线段点
-  const lineD = Line.getAttribute("d").split("C ")[1].split(" ").filter(x=>x!=='')
+  const lineD = Line.getAttribute("d").split("C ")[1].split(" ").filter(x => x !== '')
   console.log('lineD: ', lineD);
-  const lineDX = lineD.filter((x,i)=>i%2===0)
+  const lineDX = lineD.filter((x, i) => i % 2 === 0)
   console.log('lineDX: ', lineDX);
-  const lineDY = lineD.filter((x,i)=>i%2===1)
+  const lineDY = lineD.filter((x, i) => i % 2 === 1)
   console.log('lineDY: ', lineDY);
   // 获取该线段中点线段
   const midStartX = getLineMid(0.4, lineDX[0], lineDX[1], lineDX[2])
@@ -162,9 +168,9 @@ function addArrow(classArray, direction) {
   // 获取上面点topDis
   const topDis = getCoordinates(midStartX, midStartY, midEndX, midEndY, 0.4)
   // 获取下面点bottomDis
-  const bottomDis =  getCoordinates(midStartX, midStartY, midEndX, midEndY, -0.4)
+  const bottomDis = getCoordinates(midStartX, midStartY, midEndX, midEndY, -0.4)
   let dStr = ''
-  if(direction === 'PositiveDirection'){
+  if (direction === 'PositiveDirection') {
     dStr = ` M ${midEndX} ${midEndY} L ${topDis.x} ${topDis.y} L ${bottomDis.x} ${bottomDis.y} L ${midEndX} ${midEndY}`
   } else {
     dStr = ` M ${midStartX} ${midStartY} L ${topDis.x} ${topDis.y} L ${bottomDis.x} ${bottomDis.y} L ${midStartX} ${midStartY}`
@@ -174,24 +180,24 @@ function addArrow(classArray, direction) {
 }
 
 // 获取赛贝尔曲线中间点
-function getLineMid(T, P1, P2, P3){
+function getLineMid(T, P1, P2, P3) {
   //  P = (1−t)2P1 + 2(1−t)tP2 + t2P3
-  return (1-T)*(1-T)*P1 + 2*(1-T)*T*P2 + T*T*P3
+  return (1 - T) * (1 - T) * P1 + 2 * (1 - T) * T * P2 + T * T * P3
 }
 
 // 在坐标系中根据两个点求垂线上一点的坐标
-function getCoordinates(x1,y1,x2,y2,dis){
+function getCoordinates(x1, y1, x2, y2, dis) {
   // 直线的斜率
-  const k = (y2-y1)/(x2-x1)
+  const k = (y2 - y1) / (x2 - x1)
   // 垂线斜率
-  const k2 = -1/k
+  const k2 = -1 / k
   // 中间点
-  const midX = (x1+x2)/2
-  const midY = (y1+y2)/2
+  const midX = (x1 + x2) / 2
+  const midY = (y1 + y2) / 2
   // 垂线上的点距离中间点为dis的坐标
-  const x = midX + dis * Math.sqrt(1+Math.pow(k2,2))
-  const y = midY + dis * k2 * Math.sqrt(1+Math.pow(k2,2))
-  return {x,y}
-  
+  const x = midX + dis * Math.sqrt(1 + Math.pow(k2, 2))
+  const y = midY + dis * k2 * Math.sqrt(1 + Math.pow(k2, 2))
+  return { x, y }
+
 
 }

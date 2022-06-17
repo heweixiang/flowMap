@@ -16,6 +16,12 @@
   color: #595b5c;
 }
 
+/* 当前待办node样式 */
+.drawflow .drawflow-node.current{
+  border: 2px solid #58a3ba;
+  background-color: #cff1cf;
+}
+
 /* 修改连接点 */
 .drawflow .drawflow-node .input, .drawflow .drawflow-node .output{
   width: 3px;
